@@ -1,0 +1,2 @@
+# universalimageloader_mynot
+这是universalimageloader 注解的备份版本
