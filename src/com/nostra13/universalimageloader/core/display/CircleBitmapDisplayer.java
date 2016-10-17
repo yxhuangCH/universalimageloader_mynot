@@ -42,6 +42,7 @@ import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
  * @author Qualtagh, Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.9.5
  */
+// 圆形图片显示
 public class CircleBitmapDisplayer implements BitmapDisplayer {
 
 	protected final Integer strokeColor;

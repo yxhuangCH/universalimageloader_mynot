@@ -71,15 +71,20 @@ public class BaseImageDecoder implements ImageDecoder {
 		Bitmap decodedBitmap;
 		ImageFileInfo imageInfo;
 
+		// 获取数据流
 		InputStream imageStream = getImageStream(decodingInfo);
 		if (imageStream == null) {
 			L.e(ERROR_NO_IMAGE_STREAM, decodingInfo.getImageKey());
 			return null;
 		}
 		try {
+			// 调整图片的信息
 			imageInfo = defineImageSizeAndRotation(imageStream, decodingInfo);
+			// 重置数据流
 			imageStream = resetStream(imageStream, decodingInfo);
+			// 计算图片的采用率
 			Options decodingOptions = prepareDecodingOptions(imageInfo.imageSize, decodingInfo);
+		
 			decodedBitmap = BitmapFactory.decodeStream(imageStream, null, decodingOptions);
 		} finally {
 			IoUtils.closeSilently(imageStream);
@@ -162,6 +167,7 @@ public class BaseImageDecoder implements ImageDecoder {
 		} else {
 			ImageSize targetSize = decodingInfo.getTargetSize();
 			boolean powerOf2 = scaleType == ImageScaleType.IN_SAMPLE_POWER_OF_2;
+			// 计算图片的采用率
 			scale = ImageSizeUtils.computeImageSampleSize(imageSize, targetSize, decodingInfo.getViewScaleType(), powerOf2);
 		}
 		if (scale > 1 && loggingEnabled) {

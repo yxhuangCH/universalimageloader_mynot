@@ -63,6 +63,7 @@ public final class StorageUtils {
 	 * <b>NOTE:</b> Can be null in some unpredictable cases (if SD card is unmounted and
 	 * {@link android.content.Context#getCacheDir() Context.getCacheDir()} returns null).
 	 */
+	// 获取缓存目录
 	public static File getCacheDirectory(Context context, boolean preferExternal) {
 		File appCacheDir = null;
 		String externalStorageState;
@@ -74,6 +75,7 @@ public final class StorageUtils {
 			externalStorageState = "";
 		}
 		if (preferExternal && MEDIA_MOUNTED.equals(externalStorageState) && hasExternalStoragePermission(context)) {
+			// 外部存储路径
 			appCacheDir = getExternalCacheDir(context);
 		}
 		if (appCacheDir == null) {
@@ -174,6 +176,7 @@ public final class StorageUtils {
 		return appCacheDir;
 	}
 
+	// 外部存储的权限
 	private static boolean hasExternalStoragePermission(Context context) {
 		int perm = context.checkCallingOrSelfPermission(EXTERNAL_STORAGE_PERMISSION);
 		return perm == PackageManager.PERMISSION_GRANTED;

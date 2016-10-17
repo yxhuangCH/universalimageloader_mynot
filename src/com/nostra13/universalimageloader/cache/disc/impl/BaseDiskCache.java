@@ -39,8 +39,10 @@ public abstract class BaseDiskCache implements DiskCache {
 	/** {@value */
 	public static final int DEFAULT_BUFFER_SIZE = 32 * 1024; // 32 Kb
 	/** {@value */
+	// 默认图片格式
 	public static final Bitmap.CompressFormat DEFAULT_COMPRESS_FORMAT = Bitmap.CompressFormat.PNG;
 	/** {@value */
+	// 默认压缩质量为 100 ， 无损压缩
 	public static final int DEFAULT_COMPRESS_QUALITY = 100;
 
 	private static final String ERROR_ARG_NULL = " argument must be not null";
@@ -106,6 +108,7 @@ public abstract class BaseDiskCache implements DiskCache {
 		try {
 			OutputStream os = new BufferedOutputStream(new FileOutputStream(tmpFile), bufferSize);
 			try {
+				// 通过复制图片流数据的过程，监听整个过程，实现进度的监听（进度条）
 				loaded = IoUtils.copyStream(imageStream, os, listener, bufferSize);
 			} finally {
 				IoUtils.closeSilently(os);

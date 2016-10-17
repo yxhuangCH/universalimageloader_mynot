@@ -50,11 +50,11 @@ final class ProcessAndDisplayImageTask implements Runnable {
 	public void run() {
 		L.d(LOG_POSTPROCESS_IMAGE, imageLoadingInfo.memoryCacheKey);
 
-		// BitmapProcessor 默认是 
 		BitmapProcessor processor = imageLoadingInfo.options.getPostProcessor();
 		Bitmap processedBitmap = processor.process(bitmap);
 		DisplayBitmapTask displayBitmapTask = new DisplayBitmapTask(processedBitmap, imageLoadingInfo, engine,
 				LoadedFrom.MEMORY_CACHE);
+		// 如果不是同步，则利用 handler.post(displayBitmapTask)
 		LoadAndDisplayImageTask.runTask(displayBitmapTask, imageLoadingInfo.options.isSyncLoading(), handler, engine);
 	}
 }

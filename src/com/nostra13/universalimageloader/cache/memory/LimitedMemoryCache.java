@@ -37,6 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class LimitedMemoryCache extends BaseMemoryCache {
 
+	// 默认内存缓存最大为 16 M
 	private static final int MAX_NORMAL_CACHE_SIZE_IN_MB = 16;
 	private static final int MAX_NORMAL_CACHE_SIZE = MAX_NORMAL_CACHE_SIZE_IN_MB * 1024 * 1024;
 

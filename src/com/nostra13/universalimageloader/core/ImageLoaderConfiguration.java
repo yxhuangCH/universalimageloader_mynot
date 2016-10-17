@@ -90,7 +90,7 @@ public final class ImageLoaderConfiguration {
 		diskCache = builder.diskCache;
 		memoryCache = builder.memoryCache;
 		defaultDisplayImageOptions = builder.defaultDisplayImageOptions;
-		downloader = builder.downloader;
+		downloader = builder.downloader;  // 默认是 BaseImageDecoder
 		decoder = builder.decoder;
 
 		customExecutor = builder.customExecutor;
@@ -614,6 +614,7 @@ public final class ImageLoaderConfiguration {
 	 *
 	 * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
 	 * @since 1.8.0
+	 *  当不能访问的时候
 	 */
 	private static class NetworkDeniedImageDownloader implements ImageDownloader {
 
@@ -641,6 +642,7 @@ public final class ImageLoaderConfiguration {
 	 *
 	 * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
 	 * @since 1.8.1
+	 *  解决因为当网络不佳时，只会解析部分图片数据失败的问题
 	 */
 	private static class SlowNetworkImageDownloader implements ImageDownloader {
 

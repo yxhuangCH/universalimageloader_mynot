@@ -44,6 +44,7 @@ public abstract class BaseMemoryCache implements MemoryCache {
 
 	@Override
 	public boolean put(String key, Bitmap value) {
+		// 在 put 这里调用了 createReference
 		softMap.put(key, createReference(value));
 		return true;
 	}

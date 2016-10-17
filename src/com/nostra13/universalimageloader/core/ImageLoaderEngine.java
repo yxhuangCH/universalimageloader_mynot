@@ -39,13 +39,21 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 class ImageLoaderEngine {
 
+	// 配置
 	final ImageLoaderConfiguration configuration;
 
+	// 线程池用于执行加载网络中的图片, 需要配置
 	private Executor taskExecutor;
+	// 线程池用于执行在内存缓存中的图片， 需要配置
 	private Executor taskExecutorForCachedImages;
+	// 线程池用于 taskExecutor 和 taskDistributor
+	// newCachedThreadPool
 	private Executor taskDistributor;
 
+	// 同步器 Collections.synchronizedMap 保证 cacheKeysForImageAwares 的线程安全， 用来存储 ImageAware 的 ID 和 memoryCacheKey
 	private final Map<Integer, String> cacheKeysForImageAwares = Collections.synchronizedMap(new HashMap<Integer, String>());
+	// 使用图片的 uri 为 key , 存储 ReentrantLock 锁， 通过 ImageLoadingInfo ，最终在 LoadAndDisplayImageTask 中调用，用来锁住 里面在
+	// 文件或者网络加载 Bitmap 
 	private final Map<String, ReentrantLock> uriLocks = new WeakHashMap<String, ReentrantLock>();
 
 	private final AtomicBoolean paused = new AtomicBoolean(false);

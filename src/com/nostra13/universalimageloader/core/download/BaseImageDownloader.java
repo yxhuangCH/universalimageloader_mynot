@@ -60,6 +60,7 @@ public class BaseImageDownloader implements ImageDownloader {
 	/** {@value} */
 	protected static final String ALLOWED_URI_CHARS = "@#&=*+-_.,:!?()/~'%";
 
+	// 设置最大重连次数为 5 次
 	protected static final int MAX_REDIRECT_COUNT = 5;
 
 	protected static final String CONTENT_CONTACTS_URI_PREFIX = "content://com.android.contacts/";
@@ -111,10 +112,13 @@ public class BaseImageDownloader implements ImageDownloader {
 	 *                     URL.
 	 */
 	protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
+		
+		// 创建 HttpURLConnection 实例
 		HttpURLConnection conn = createConnection(imageUri, extra);
 
 		// 重连设置
 		int redirectCount = 0;
+		
 		while (conn.getResponseCode() / 100 == 3 && redirectCount < MAX_REDIRECT_COUNT) {
 			conn = createConnection(conn.getHeaderField("Location"), extra);
 			redirectCount++;

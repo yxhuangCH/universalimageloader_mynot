@@ -19,7 +19,6 @@ import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -68,6 +67,7 @@ public class ImageLoader {
 	private volatile static ImageLoader instance;
 
 	/** Returns singleton class instance */
+	// 单例模式
 	public static ImageLoader getInstance() {
 		if (instance == null) {
 			synchronized (ImageLoader.class) {
@@ -239,7 +239,7 @@ public class ImageLoader {
 			throw new IllegalArgumentException(ERROR_WRONG_ARGUMENTS);
 		}
 		if (listener == null) {
-			listener = defaultListener;
+			listener = defaultListener;  // SimpleImageLoadingListener
 		}
 		// 默认是空的
 		if (options == null) {
@@ -264,7 +264,7 @@ public class ImageLoader {
 			targetSize = ImageSizeUtils.defineTargetSizeForView(imageAware, configuration.getMaxImageSize());
 		}
 		
-		// 生成 key
+		// 生成 key， 使用 uri 和尺寸结合
 		String memoryCacheKey = MemoryCacheUtils.generateKey(uri, targetSize);
 		engine.prepareDisplayTaskFor(imageAware, memoryCacheKey);  // 其实是放到 engine 里面的 map 中
 
@@ -278,6 +278,7 @@ public class ImageLoader {
 			L.d(LOG_LOAD_IMAGE_FROM_MEMORY_CACHE, memoryCacheKey);
 
 			if (options.shouldPostProcess()) {
+				// 图片加载包装类
 				ImageLoadingInfo imageLoadingInfo = new ImageLoadingInfo(uri, imageAware, targetSize, memoryCacheKey,
 						options, listener, progressListener, engine.getLockForUri(uri));
 				

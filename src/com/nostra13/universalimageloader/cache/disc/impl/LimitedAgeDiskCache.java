@@ -82,6 +82,7 @@ public class LimitedAgeDiskCache extends BaseDiskCache {
 				cached = true;
 			}
 
+			// 判断下载时间是否已经大于设定时间，大于则移除
 			if (System.currentTimeMillis() - loadingDate > maxFileAge) {
 				file.delete();
 				loadingDates.remove(file);

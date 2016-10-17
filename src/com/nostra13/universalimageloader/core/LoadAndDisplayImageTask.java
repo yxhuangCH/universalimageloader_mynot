@@ -126,7 +126,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 			L.d(LOG_WAITING_FOR_IMAGE_LOADED, memoryCacheKey);
 		}
 
-		loadFromUriLock.lock();  // 加锁
+		loadFromUriLock.lock();  // 加锁， 在 try 外面
 		Bitmap bmp;
 		try {
 			// 检测是否重用， 是否被取消
@@ -228,7 +228,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 				loadedFrom = LoadedFrom.DISC_CACHE;
 
 				checkTaskNotActual();
-				// 解析数据变成 bitmap
+				// 解析数据变成 bitmap, 采样调整
 				bitmap = decodeImage(Scheme.FILE.wrap(imageFile.getAbsolutePath()));
 			}
 			
@@ -247,7 +247,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 				}
 
 				checkTaskNotActual();
-				// 把存储在文件里面的图片流，还原成 Bitmap
+				// 把存储在文件里面的图片流，通过采样还原成 Bitmap，
 				bitmap = decodeImage(imageUriForDecoding);
 
 				if (bitmap == null || bitmap.getWidth() <= 0 || bitmap.getHeight() <= 0) {
@@ -275,6 +275,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 		ViewScaleType viewScaleType = imageAware.getScaleType();
 		ImageDecodingInfo decodingInfo = new ImageDecodingInfo(memoryCacheKey, imageUri, uri, targetSize, viewScaleType,
 				getDownloader(), options);
+		// 默认是 BaseImageDecoder
 		return decoder.decode(decodingInfo);
 	}
 
@@ -291,6 +292,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 				int height = configuration.maxImageHeightForDiskCache;
 				if (width > 0 || height > 0) {
 					L.d(LOG_RESIZE_CACHED_IMAGE_FILE, memoryCacheKey);
+					// 从文件缓存中取出图片流数据，根据所需的宽高进行解码
 					resizeAndSaveImage(width, height); // TODO : process boolean result
 				}
 			}
@@ -308,6 +310,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 			return false;
 		} else {
 			try {
+				// 将下载完的数据以流的型式存在文件缓存中，这是原始的图片流数据
 				return configuration.diskCache.save(uri, is, this);
 			} finally {
 				IoUtils.closeSilently(is);

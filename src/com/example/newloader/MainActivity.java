@@ -1,5 +1,7 @@
 package com.example.newloader;
 
+import java.lang.reflect.Field;
+
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -58,6 +60,34 @@ public class MainActivity extends Activity {
 		});
 		
 		ImageLoader.getInstance().displayImage(url, imageView);
+		
+		text();
+	}
+	
+	private void text(){
+		Text eText = new Text("ijiiii");
+		try {
+			Field field = Text.class.getDeclaredField("text");
+			field.setAccessible(true);
+			Log.i("yxh", "text111 " + field.get(eText));
+			
+			
+			Field field2 = Text.class.getDeclaredField("text");
+			Log.i("yxh", "text222 " + (String)field2.get(eText));  // 这里报错，拿不到 private 属性
+			
+		} catch (Exception e) {
+			Log.i("yxh", "text error ");
+			e.printStackTrace();
+		}
+	}
+	
+	
+	private class Text {
+		private String text = null;
+		
+		public Text(String text){
+			this.text = text;
+		}
 	}
 
 }

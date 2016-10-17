@@ -129,7 +129,15 @@ public class ImageViewAware extends ViewAware {
 	private static int getImageViewFieldValue(Object object, String fieldName) {
 		int value = 0;
 		try {
+			// 返回类中声明的给定名称的域
 			Field field = ImageView.class.getDeclaredField(fieldName);
+			// 为反射对象设置可访问标志。 flag 为 true 表明屏蔽 Java 语言的访问检查，使得对象的
+			// 私有属性也可以被查询和设置。 
+			// Set the accessible flag for this object to the indicated boolean value. A value of true indicates 
+			// that the reflected object should suppress Java language access checking when it is used. A value 
+			// of false indicates that the reflected object should enforce Java language access checks.
+			// 《Java 核心技术 卷 I》P205
+			// 设置后可以访问 private 属性
 			field.setAccessible(true);
 			int fieldValue = (Integer) field.get(object);
 			if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {

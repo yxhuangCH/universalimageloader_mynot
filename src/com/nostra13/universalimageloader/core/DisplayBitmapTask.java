@@ -40,7 +40,7 @@ final class DisplayBitmapTask implements Runnable {
 	private final String imageUri;
 	private final ImageAware imageAware;
 	private final String memoryCacheKey;
-	private final BitmapDisplayer displayer;
+	private final BitmapDisplayer displayer;	// 默认实现类是 SimpleBitmapDisplayer
 	private final ImageLoadingListener listener;
 	private final ImageLoaderEngine engine;
 	private final LoadedFrom loadedFrom;
@@ -59,16 +59,22 @@ final class DisplayBitmapTask implements Runnable {
 
 	@Override
 	public void run() {
+		// 已经被回收
 		if (imageAware.isCollected()) {
 			L.d(LOG_TASK_CANCELLED_IMAGEAWARE_COLLECTED, memoryCacheKey);
 			listener.onLoadingCancelled(imageUri, imageAware.getWrappedView());
+		// View 的重用
 		} else if (isViewWasReused()) {
 			L.d(LOG_TASK_CANCELLED_IMAGEAWARE_REUSED, memoryCacheKey);
 			listener.onLoadingCancelled(imageUri, imageAware.getWrappedView());
 		} else {
+			// 显示
 			L.d(LOG_DISPLAY_IMAGE_IN_IMAGEAWARE, loadedFrom, memoryCacheKey);
+			// 默认是 SimpleBitmapDisplayer
 			displayer.display(bitmap, imageAware, loadedFrom);
+			// 移除
 			engine.cancelDisplayTaskFor(imageAware);
+			// 加载完成回调
 			listener.onLoadingComplete(imageUri, imageAware.getWrappedView(), bitmap);
 		}
 	}
