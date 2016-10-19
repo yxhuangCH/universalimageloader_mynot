@@ -266,7 +266,7 @@ public class ImageLoader {
 		
 		// 生成 key， 使用 uri 和尺寸结合
 		String memoryCacheKey = MemoryCacheUtils.generateKey(uri, targetSize);
-		engine.prepareDisplayTaskFor(imageAware, memoryCacheKey);  // 其实是放到 engine 里面的 map 中
+		engine.prepareDisplayTaskFor(imageAware, memoryCacheKey);  // 其实是放到 engine 里面的 map 中, imageId, menoryKey
 
 		// 回调开始
 		listener.onLoadingStarted(uri, imageAware.getWrappedView());

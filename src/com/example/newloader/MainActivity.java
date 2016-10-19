@@ -36,6 +36,9 @@ public class MainActivity extends Activity {
 		ImageLoader.getInstance().init(configuration);
 		
 		String url  = "http://img14.poco.cn/mypoco/myphoto/20130131/22/17323571520130131221457027_640.jpg";
+		ImageLoader.getInstance().displayImage(url, imageView);
+		
+		// 加载过程的完整回调
 		ImageLoader.getInstance().loadImage(url, new ImageLoadingListener() {
 			
 			@Override
@@ -58,8 +61,6 @@ public class MainActivity extends Activity {
 				Log.i(TAG, "onLoadingCancelled");
 			}
 		});
-		
-		ImageLoader.getInstance().displayImage(url, imageView);
 		
 		text();
 	}

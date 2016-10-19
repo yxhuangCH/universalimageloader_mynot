@@ -175,7 +175,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 			fireCancelEvent();
 			return;
 		} finally {
-			loadFromUriLock.unlock();  // 解锁
+			loadFromUriLock.unlock();  // 解锁, 一定要在 finally 里面
 		}
 
 		// 显示图片
